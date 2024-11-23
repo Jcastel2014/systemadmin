@@ -1,0 +1,24 @@
+sudo docker run --name postgres-dbthree -e POSTGRES_USER=user -e POSTGRES_PASSWORD=password -e POSTGRES_DB=mydb -p 5432:5432 -d postgres
+
+-name	=> name of database
+-e 		=> set enviromental variables
+-p 		=> maps port
+-d 		=> use image of postgres
+
+
+sudo docker network create my-network
+
+sudo docker network connect my-network postgres-dbthree
+
+sudo docker run -it --rm -v $(pwd):/go/src/app -w /go/src/app --network my-network -p 4000:4000 -e PIN_DB_DSN="postgres://user:password@postgres-dbthree:5432/mydb?sslmode=disable" go-dev-env go run ./cmd/web -port=4000 -env=production -db-dsn=postgres://user:password@postgres-dbthree:5432/mydb?sslmode=disable
+
+-it		=> runs an interactive terminal for golang
+
+-v 		=>Mounts the current working directory to /go/src/app. allows the container to access your code.
+
+-w 		=> Sets the working directory inside the container to
+
+sudo docker build -t go-dev-env .
+
+
+
